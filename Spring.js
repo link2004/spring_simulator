@@ -17,7 +17,7 @@ class Spring extends createjs.Shape{
         this.isKinematic = true;//物理演算の影響を受けるか
         this.y = 300;           //オブジェクトのY座標
         this.mass = 1.0;        //オブジェクトの質量
-        this.k = 0.5;           //ばねの強さ
+        this.k = 0.9;           //ばねの強さ
         this.damp = 1;       //摩擦による減衰率
         this.velY = 0.0;        //Ｙ方向のスピード
         this.force = 0.0;       //ばねの合力
