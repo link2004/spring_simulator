@@ -4,25 +4,26 @@ class Spring extends createjs.Shape{
     getY() {return this.y}; //Y座標を返す
 
     //コンストラクタ
-    constructor(){
+    constructor(size){
 
         super();                //親クラスのコンストラクタの呼び出し
 
         this.number;            //ばねの割り当て
-        this.isFreeStart=false;  //左端が自由端
+        this.isFreeStart=false; //左端が自由端
         this.isFreeEnd=true;    //右端が自由端
         this.rightSpring;       //右のばね
         this.leftSpring;        //左のばね
 
         this.isKinematic = true;//物理演算の影響を受けるか
-        this.y = 300;           //オブジェクトのY座標
         this.mass = 1.0;        //オブジェクトの質量
-        this.k = 0.9;           //ばねの強さ
-        this.damp = 1;       //摩擦による減衰率
+        this.k = 0.5;           //ばねの強さ
+        this.damp = 1;          //摩擦による減衰率
         this.velY = 0.0;        //Ｙ方向のスピード
         this.force = 0.0;       //ばねの合力
         this.accel = 0.0;       //加速度
-        this.originY = 300;     //基準点
+        this.originY;           //基準点    
+
+        this.alpha = 0.25;       //透明度
 
          // インタラクティブの設定
         this.addEventListener("mousedown", this.handleDown);
@@ -30,7 +31,7 @@ class Spring extends createjs.Shape{
         this.addEventListener("pressup", this.handleUp);
 
         //形を定義
-        this.graphics.beginFill("black").drawCircle(0, 0, 10);
+        this.graphics.beginFill("black").drawCircle(0, 0, size);
     }
 
     UpdateForce(){

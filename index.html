@@ -2,6 +2,7 @@
 <head>
   <meta charset="utf-8" />
   <script src="https://code.createjs.com/1.0.0/createjs.min.js"></script>
+  <link rel="stylesheet" href="style.css">
   <script src="Spring.js"></script>
   <script>
     window.addEventListener("load", init);
@@ -9,20 +10,30 @@
     function init() {
       var stage = new createjs.Stage("myCanvas");
 
+      // リサイズイベントを検知してリサイズ処理を実行
+      window.addEventListener("resize", handleResize);
+      handleResize(); // 起動時にもリサイズしておく
+
       // タッチ操作をサポートしているブラウザーならば
       if(createjs.Touch.isSupported() == true){
         // タッチ操作を有効にします。
         createjs.Touch.enable(stage)
       }
-      
+
       var springList = [];
+      var speed = 20;
 
       //ばねを作成
-      var springNum = 40;
+      var springNum = 2000;
+      var w = window.innerWidth;
+      var h = window.innerHeight;
+      var size = (w/springNum*0.8);
       for(let i=0;i<springNum;i++){
-        var spring = new Spring();  //バネオブジェクトの作成
+        var spring = new Spring(size*10);  //バネオブジェクトの作成
         spring.number = i;
-        spring.x = 100+i*20;       //x座標を調節
+        spring.y = h / 2;
+        spring.originY = h / 2;
+        spring.x = (w*0.1)+i*size;       //x座標を調節
         stage.addChild(spring);     //ステージに追加
         springList.push(spring);    //配列に追加
       }
@@ -36,14 +47,27 @@
 
       // Tickイベントの処理
       function handleTick() {
-        for (let i=0;i<springNum;i++)springList[i].UpdateForce();//全てのばねを動かす
-        for (let i=0;i<springNum;i++)springList[i].move();//全てのばねを動かす
+        for (let i=0;i<speed;i++){
+          for (let i=0;i<springNum;i++)springList[i].UpdateForce();//全てのばねを動かす
+          for (let i=0;i<springNum;i++)springList[i].move();//全てのばねを動かす
+        }
+        stage.update();
+      }
+      // リサイズ処理
+      function handleResize(event) {
+        // 画面幅・高さを取得
+        var w = window.innerWidth;
+        var h = window.innerHeight;
+        // Canvas要素の大きさを画面幅・高さに合わせる
+        stage.canvas.width = w;
+        stage.canvas.height = h;
+        // 画面更新する
         stage.update();
       }
     }
   </script>
 </head>
 <body>
-  <canvas id="myCanvas" width="960" height="540"></canvas>
+  <canvas id="myCanvas"></canvas>
 </body>
 </html>
