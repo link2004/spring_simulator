@@ -1,0 +1,49 @@
+<html>
+<head>
+  <meta charset="utf-8" />
+  <script src="https://code.createjs.com/1.0.0/createjs.min.js"></script>
+  <script src="Spring.js"></script>
+  <script>
+    window.addEventListener("load", init);
+
+    function init() {
+      var stage = new createjs.Stage("myCanvas");
+
+      // タッチ操作をサポートしているブラウザーならば
+      if(createjs.Touch.isSupported() == true){
+        // タッチ操作を有効にします。
+        createjs.Touch.enable(stage)
+      }
+
+      var springList = [];
+
+      //ばねを作成
+      var springNum = 80;
+      for(let i=0;i<springNum;i++){
+        var spring = new Spring();  //バネオブジェクトの作成
+        spring.number = i;
+        spring.x = 100+i*10;       //x座標を調節
+        stage.addChild(spring);     //ステージに追加
+        springList.push(spring);    //配列に追加
+      }
+      //左右のばねを設定
+      for(let i=0;i<springNum;i++){
+        if(i!=0)          springList[i].leftSpring = springList[i-1];
+        if(i!=springNum-1)springList[i].rightSpring = springList[i+1];
+      }
+      // Tickイベントの登録
+      createjs.Ticker.addEventListener("tick", handleTick);
+
+      // Tickイベントの処理
+      function handleTick() {
+        for (let i=0;i<springNum;i++)springList[i].UpdateForce();//全てのばねを動かす
+        for (let i=0;i<springNum;i++)springList[i].move();//全てのばねを動かす
+        stage.update();
+      }
+    }
+  </script>
+</head>
+<body>
+  <canvas id="myCanvas" width="960" height="540"></canvas>
+</body>
+</html>
